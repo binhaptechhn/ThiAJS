@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+<body ng-app="myApp" style="margin: 0 0 0 40%; margin-top: 5%;background-color: lightpink">
+  <div ng-controller="MathController">
+    <p style="background-color: lightpink;font-family: 'Cambria Math'">MENU</p><select ng-options="dependant for dependant in dependants" ng-model="selectedD" ng-init = "true"></select>
+    <p>Size: </p>
+    <select ng-options="gender for gender in genders" ng-model="selectedG" ng-init="selectedG = true"></select>
+    <p>Price: {{price}}VND</p>
+    <p>Quantity: <input type="text" ng-model="quantity"/> </p>
+    <p> Subtotal: ${{empInsurance()}}</p>
+    <p> Tax: ${{incomeTax()}}</p>
+    <div ng-switch on="selectedD">
+      <div ng-switch-when="Nau Da"></div>
+      <div ng-switch-when="Den Da"></div>
+      <div ng-switch-when="Bac Xiu"></div>
+    </div>
+    <div ng-switch on="selectedG">
+      <div ng-switch-when="M"></div>
+      <div ng-switch-when="L"></div>
+    </div>
+
+    <p> Your final salary is: ${{totalSalary().toFixed(2)}}</p>
+  </div>
+  <script>
+    var app = angular.module('myApp', []);
+
+    app.controller('MathController', function($scope) {
+      $scope.price = 0;
+      $scope.quantity = 1;
+      $scope.genders = ['L' , 'M'];
+      $scope.selectedG = $scope.genders[0];
+      $scope.dependants = ['Nau Da', 'Den Da', 'Bac Xiu'];
+      $scope.selectedD = $scope.dependants[0];
+      $scope.empInsurance = function() {
+
+        return (Number($scope.quantity) * (Number($scope.price)));
+      }
+
+      $scope.incomeTax = function() {
+
+        if ($scope.selectedG == "L") {
+          switch($scope.selectedD) {
+            case "Nau Da": $scope.price = 25000;
+              break;
+            case "Den Da": $scope.price = 20000;
+              break;
+            case "Bac Xiu": $scope.price = 30000;
+              break;
+          }
+        } else {
+          switch($scope.selectedD) {
+            case "Nau Da": $scope.price = 23000;
+              break;
+            case "Den Da": $scope.price = 18000;
+              break;
+            case "Bac Xiu": $scope.price = 25000;
+              break;
+          }
+        }
+        return (Number($scope.quantity) * (Number($scope.price) * 0.1))
+
+      }
+      $scope.totalSalary = function(){
+        return (Number($scope.quantity) * (Number($scope.price))) + (Number($scope.quantity) * (Number($scope.price) * 0.1));
+      }
+    });
+  </script>
+  </body>
+</html>
